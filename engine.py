@@ -1,4 +1,4 @@
-import sys, pygame
+import sys, pygame, column, tile, player
 pygame.init()
 
 black = 0, 0, 0
@@ -7,7 +7,6 @@ m = 10
 tiles = [[0] * m for i in range(n)]
 
 size = width, height = n*76, m*76
-
 
 screen = pygame.display.set_mode(size)
 
