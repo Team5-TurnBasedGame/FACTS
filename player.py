@@ -1,1 +1,1 @@
-class player:
+#class player:
