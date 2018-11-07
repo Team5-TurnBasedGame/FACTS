@@ -3,19 +3,19 @@ import pygame
 import renderer
 import eventhandler
 import logic
+import entity
 pygame.init()
 
 n = 10
 m = 10
 
-r = renderer.Renderer(n, m)
-
-
-
+pygame.display.set_caption("First Game")
 clock = pygame.time.Clock()
+game = logic.logic()
+r = renderer.Renderer(game)
 
 while 1:
-    eventhandler.handle_events()
-    logic.resolve_changes()
+    eventhandler.handle_events(game)
+    # logic.resolve_changes()
     r.render()
-    clock.tick(15)
+    clock.tick(60)

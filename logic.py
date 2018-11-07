@@ -9,11 +9,17 @@ class logic:
     entities = []
 
     def __init__(self):
-        stateinfo["state"] = "combat"
-        stateinfo["current_entity"] = "player"
+        self.stateinfo["state"] = "combat"
+        self.stateinfo["screen"] = (10,10)
+        man = entity.entity(0,0,64,64)
+        self.entities.append(man)
+        self.stateinfo["current_entity"] = self.entities.index(man)
 
     def resolve_changes(self):
-        print()
+        print("Nothing to do.")
 
-    def move(self, entity, offset_x, offset_y):
-        entity.move(offset_x, offset_y)
+    def add_entity(self, entity):
+        self.entities.append(entity)
+
+    def get_entity(self, index):
+        return self.entities[index]

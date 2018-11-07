@@ -1,19 +1,18 @@
+import sys
 import pygame
 
+class entity(object):
+    def __init__(self, x, y, width, height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.vel = 76
+        self.char = pygame.image.load('media/standing.png')
 
-class entity:
-
-    position_x = 0
-    position_y = 0
-
-
-
-    def move(self, x_offset, y_offset):
-        self.position_x += x_offset
-        self.position_y += y_offset
-        self.graphic = pygame.image.load("player.png")
-        self.graphicrect = self.graphic.getrect()
+    def draw(self,win):
+        win.blit(self.char, (self.x, self.y))
 
     def relocate(self, new_x, new_y):
-        self.position_x = new_x
-        self.position_y = new_y
+        self.x = new_x
+        self.y = new_y
