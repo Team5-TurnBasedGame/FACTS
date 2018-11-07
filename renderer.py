@@ -18,4 +18,6 @@ class Renderer:
                 self.squarerect.top = i*76
                 self.squarerect.left = j*76
                 self.screen.blit(self.square, self.squarerect)
+
+        for i in
         pygame.display.flip()
