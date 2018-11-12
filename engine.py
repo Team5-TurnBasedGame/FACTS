@@ -17,9 +17,9 @@ r = renderer.Renderer(game)
 wtev = True
 
 while 1:
-    clock.tick(60)
     eventhandler.handle_events(game)
-    # logic.resolve_changes()
+    game.stateinfo['state'].handle_events()
+    State.resolve_changes()
     r.render()
     
     if wtev:

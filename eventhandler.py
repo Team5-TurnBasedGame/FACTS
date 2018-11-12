@@ -2,6 +2,15 @@ import sys, pygame
 
 
 def handle_events(game):
+    if game.stateinfo:
+        if game.stateinfo["turn"] == "player":
+            self.handle_system_events(game)
+            self.handle_player_events(game)
+        elif game.stateinfo["turn"] == "enemy":
+            self.handle_system_events(game)
+            break
+            
+def handle_system_events(game):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
@@ -9,6 +18,7 @@ def handle_events(game):
             if event.key == pygame.K_ESCAPE:
                 pygame.event.post(pygame.event.Event(pygame.QUIT))
 
+def handle_player_events(game):
     keys = pygame.key.get_pressed()
 
     curr = game.get_entity(game.stateinfo["current_entity"])

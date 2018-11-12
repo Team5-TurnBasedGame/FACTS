@@ -2,9 +2,19 @@ import sys
 import pygame
 import entity
 
-class logic:
-    stateinfo = {
+class State:
+    def __init__(self):
+        self.done = False
+        self.next = None
+        self.quit = False
+        self.previous = None
 
+    
+        
+    stateinfo = {
+            'state': combat(),
+            'turn': player(),
+            
     }
     entities = []
 
@@ -12,12 +22,20 @@ class logic:
 
     def __init__(self):
         self.stateinfo["state"] = "combat"
+        print(self.stateinfo["state"]
+        self.stateinfo["turn"] = "player"
         self.stateinfo["screen"] = (10,10)
         man = entity.entity(0,0,64,64)
         self.entities.append(man)
         self.stateinfo["current_entity"] = self.entities.index(man)
+
     def resolve_changes(self):
-        print("Nothing to do.")
+        if self.stateinfo["state"] == "combat"
+            if self.stateinfo["turn"] == "player":
+                break # nothing to do
+            elif self.stateinfo["turn"] == "enemy":
+                for entity in self.entities:
+                    entity.ai.take_turn()
 
     def add_entity(self, entity):
         self.entities.append(entity)
@@ -27,3 +45,9 @@ class logic:
 
     def get_current_entity(self):
         return self.stateinfo["current_entity"]
+
+
+              
+
+  
+            
