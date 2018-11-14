@@ -1,9 +1,9 @@
-import sys, pygame, logic
+import sys, pygame
 
 class Renderer:
     def __init__(self, game):
 
-        self.tilewidth, self.tileheight = game.stateinfo.get("screen")
+        self.tilewidth, self.tileheight = game.screen
         self.tiles = [[0] * self.tileheight for i in range(self.tilewidth)]
         self.size = self.width, self.height = self.tileheight*76, self.tilewidth*76
         self.screen = pygame.display.set_mode(self.size)
@@ -15,12 +15,11 @@ class Renderer:
     def render(self, game):
 
         self.renderBackground()
-        if game.stateinfo:
-            if game.stateinfo['title'] == "start":
-                self.renderTitleScreen()
-            elif game.stateinfo['turn'] == "select screen":
-                self.renderLevelScreen()
+        game.render()
+        pygame.display.flip()
 
+    def resolve_animations(self, game):
+        print()
             #elif game.stateinfo['game']
                 #try:
                  #   currentAnim = tuple(self.game.animations.pop())

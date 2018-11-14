@@ -11,15 +11,16 @@ m = 10
 
 pygame.display.set_caption("First Game")
 clock = pygame.time.Clock()
-game = logic.State()
+game = logic.title()
 r = renderer.Renderer(game)
 
-wtev = True
+wtev = False
 
-while 1:
-    #eventhandler.handle_events(game)
-    game.stateinfo['state'].handle_events()
-    State.resolve_changes()
+while (not game.quit):
+    game.handle_events()
+    game.resolve_changes()
+    game = logic.updateState(game)
+    clock.tick(10)
     r.render(game)
     
     if wtev:
@@ -29,3 +30,7 @@ while 1:
         game.animations.append(("right", game.get_current_entity()))
         game.animations.append(("right", game.get_current_entity()))
         wtev = False
+
+pygame.display.quit()
+pygame.quit()
+sys.exit()
