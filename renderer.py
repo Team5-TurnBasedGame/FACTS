@@ -1,4 +1,4 @@
-import sys, pygame
+import sys, pygame, logic
 
 class Renderer:
     def __init__(self, game):
@@ -12,23 +12,30 @@ class Renderer:
         self.man = game.entities[-1]
         self.game = game
         
-    def render(self):
-        self.renderBackground()
+    def render(self, game):
 
-        try:
-            currentAnim = tuple(self.game.animations.pop())
-            currentEntity = self.game.get_entity(currentAnim[1])
-            if currentAnim[0] == "right":
-                self.walkRight(currentEntity)
-            elif currentAnim[0] == "left":
-                self.walkLeft(currentEntity)
-            elif currentAnim[0] == "up":
-                self.walkUp(currentEntity)
-            elif currentAnim[0] == "down":
-                self.walkDown(currentEntity)
-        except:
-            self.man.draw(self.screen)
-        pygame.display.flip()
+        self.renderBackground()
+        if game.stateinfo:
+            if game.stateinfo['title'] == "start":
+                self.renderTitleScreen()
+            elif game.stateinfo['turn'] == "select screen":
+                self.renderLevelScreen()
+
+            #elif game.stateinfo['game']
+                #try:
+                 #   currentAnim = tuple(self.game.animations.pop())
+                  #  currentEntity = self.game.get_entity(currentAnim[1])
+                   # if currentAnim[0] == "right":
+                    #    self.walkRight(currentEntity)
+                    #elif currentAnim[0] == "left":
+                     #   self.walkLeft(currentEntity)
+                    #elif currentAnim[0] == "up":
+                    #    self.walkUp(currentEntity)
+                    #elif currentAnim[0] == "down":
+                     #   self.walkDown(currentEntity)
+                      #  except:
+                       #     self.man.draw(self.screen)
+                        #    pygame.display.flip()
 
     def renderBackground(self):
         black = 0, 0, 0
@@ -39,6 +46,14 @@ class Renderer:
                 self.squarerect.top = i*76
                 self.squarerect.left = j*76
                 self.screen.blit(self.square, self.squarerect)
+
+    def renderTitleScreen(self):
+        blue = 0, 0, 255
+        self.screen.fill(blue)
+
+    def renderLeveleScreen(self):
+        green = 0, 255, 0
+        self.screen.fill(green)
 
     def walkRight(self, entity):
         counter = 0
