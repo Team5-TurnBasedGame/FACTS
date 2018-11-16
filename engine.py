@@ -12,16 +12,24 @@ m = 10
 pygame.display.set_caption("First Game")
 clock = pygame.time.Clock()
 game = logic.title()
-r = renderer.Renderer(game)
 
-wtev = False
+walkRight = [pygame.image.load('media/R1.png'), pygame.image.load('media/R2.png'), pygame.image.load('media/R3.png'), pygame.image.load('media/R4.png'), pygame.image.load('media/R5.png'), pygame.image.load('media/R6.png'), pygame.image.load('media/R7.png'), pygame.image.load('media/R8.png'), pygame.image.load('media/R9.png')]
+walkLeft = [pygame.image.load('media/L1.png'), pygame.image.load('media/L2.png'), pygame.image.load('media/L3.png'), pygame.image.load('media/L4.png'), pygame.image.load('media/L5.png'), pygame.image.load('media/L6.png'), pygame.image.load('media/L7.png'), pygame.image.load('media/L8.png'), pygame.image.load('media/L9.png')]
+char = pygame.image.load('media/standing.png')
+manUnit = entity.unit(walkRight, walkLeft)
+man = entity.entity(0, 0, 64, 64, char, manUnit)
+
+game.entities.append(man)
+game.current_entity = man
+
+wtev = True
 
 while (not game.quit):
     game.handle_events()
     game.resolve_changes()
+    game.render()
     game = logic.updateState(game)
     clock.tick(10)
-    r.render(game)
     
     if wtev:
         game.animations.append(("up", game.get_current_entity()))

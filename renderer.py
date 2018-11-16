@@ -1,24 +1,21 @@
 import sys, pygame
 
 class Renderer:
-    def __init__(self, game):
+    def __init__(self, screen):
 
-        self.tilewidth, self.tileheight = game.screen
+        self.tilewidth, self.tileheight = screen
         self.tiles = [[0] * self.tileheight for i in range(self.tilewidth)]
         self.size = self.width, self.height = self.tileheight*76, self.tilewidth*76
         self.screen = pygame.display.set_mode(self.size)
         self.square = pygame.image.load("square.png")
         self.squarerect = self.square.get_rect()
-        self.man = game.entities[-1]
-        self.game = game
         
-    def render(self, game):
+    def render(self):
 
         self.renderBackground()
-        game.render()
         pygame.display.flip()
 
-    def resolve_animations(self, game):
+    def resolve_animations(self):
         print()
             #elif game.stateinfo['game']
                 #try:
@@ -50,7 +47,7 @@ class Renderer:
         blue = 0, 0, 255
         self.screen.fill(blue)
 
-    def renderLeveleScreen(self):
+    def renderLevelSelect(self):
         green = 0, 255, 0
         self.screen.fill(green)
 

@@ -18,20 +18,17 @@ def handle_title_events(State, eventList):
 
 def handle_level_events(State, eventList):
     for event in eventList:
-        print("event")
         if event.type == pygame.KEYDOWN:
-            print("keydown")
             if event.key == pygame.K_LEFT:
                 State.done = True
                 State.next = 'roster'
             if event.key == pygame.K_RIGHT:
                 State.done = True
                 State.next = 'title'
+
 def handle_roster_events(State, eventList):
     for event in eventList:
-        print("event")
         if event.type == pygame.KEYDOWN:
-            print("keydown")
             if event.key == pygame.K_LEFT:
                 State.done = True
                 State.next = 'title'

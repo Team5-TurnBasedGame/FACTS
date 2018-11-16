@@ -15,10 +15,8 @@ class State:
         self.quit = False
         self.previous = None
         self.screen = (10,10)
-        
-        man = entity.entity(0,0,64,64)
-        self.entities.append(man)
-        self.current_entity = man
+        self.current_entity = None
+        self.r = renderer.Renderer(self.screen)
 
     def resolve_changes(self):
         print()
@@ -31,8 +29,6 @@ class State:
 
     def get_current_entity(self):
         return self.current_entity
-    
-
 
 class title(State):
     def __init__(self):
@@ -44,7 +40,12 @@ class title(State):
         eh.handle_title_events(self, eventList)
 
     def render(self):
-        print("rendering title")
+        self.r.renderBackground()
+        self.r.renderTitleScreen()
+        pygame.display.flip()
+
+    def cleanUp(self):
+        print("Cleaning up title")
 
 class levelSelect(State):
     def __init__(self):
@@ -54,30 +55,29 @@ class levelSelect(State):
         eventList = pygame.event.get()
         eh.handle_system_events(self, eventList)
         eh.handle_level_events(self, eventList)
+
     def render(self):
-        print("rendering levelSelect")
+        self.r.renderBackground()
+        self.r.renderLevelSelect()
+        pygame.display.flip()
+
+    def cleanUp(self):
+        print("Cleaning up levelSelect")
 
 class rosterMenu(State):
     def __init__(self):
         State.__init__(self)
 
     def handle_events(self):
-            eventList = pygame.event.get()
-            eh.handle_system_events(self, eventList)
-            eh.handle_roster_events(self, eventList)
+        eventList = pygame.event.get()
+        eh.handle_system_events(self, eventList)
+        eh.handle_roster_events(self, eventList)
 
     def render(self):
-            print("rendering RosterMenu")
-
-
-    #def __init__(self):
-        #self.stateinfo["state"] = "combat"
-        #print(self.stateinfo["state"]
-        #self.stateinfo["turn"] = "player"
-        #
-        #man = entity.entity(0,0,64,64)
-        #self.entities.append(man)
-        #self.stateinfo["current_entity"] = self.entities.index(man)
+        print("nothing to render")
+        
+    def cleanUp(self):
+            print("Cleaning up rosterMenu")
 
     
 stateinfo = {
@@ -89,7 +89,11 @@ stateinfo = {
 def updateState(State):
     if State.done == True:
         if State.next != None:
-            return stateinfo[State.next]
+            temp = stateinfo[State.next]
+            State.next = None
+            State.done = False
+            State.cleanUp()
+            return temp
     else:
         return State
     
