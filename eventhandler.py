@@ -1,24 +1,34 @@
-import sys, pygame
+import sys, pygame, logic
 
-
-def handle_events(game):
-    for event in pygame.event.get():
+def handle_system_events(State, eventList):
+    for event in eventList:
         if event.type == pygame.QUIT:
-            sys.exit()
+            State.quit = True
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                pygame.event.post(pygame.event.Event(pygame.QUIT))
+                State.quit = True
 
-    keys = pygame.key.get_pressed()
 
-    curr = game.get_entity(game.stateinfo["current_entity"])
+def handle_title_events(State, eventList):
+    for event in eventList:
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                State.done = True
+                State.next = 'turn'
 
-    if keys[pygame.K_LEFT] and curr.x >= curr.vel:
-        curr.x -= curr.vel
-    elif keys[pygame.K_RIGHT] and curr.x < (760 - curr.width - curr.vel):
-        curr.x += curr.vel
-    elif keys[pygame.K_UP] and curr.y >= curr.vel:
-        curr.y -= curr.vel
-    elif keys[pygame.K_DOWN] and curr.y < (760 - curr.height - curr.vel):
-        curr.y += curr.vel
+def handle_level_events(State, eventList):
+    for event in eventList:
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                State.done = True
+                State.next = 'roster'
+            if event.key == pygame.K_RIGHT:
+                State.done = True
+                State.next = 'title'
 
+def handle_roster_events(State, eventList):
+    for event in eventList:
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                State.done = True
+                State.next = 'title'
