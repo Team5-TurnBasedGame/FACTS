@@ -15,7 +15,6 @@ class State:
         self.quit = False
         self.previous = None
         self.screen = (10,10)
-        self.current_entity = None
         self.r = renderer.Renderer(self.screen)
 
     def resolve_changes(self):
@@ -34,9 +33,10 @@ class State:
         try:
             currentAnim, currentEntity = tuple(self.animations.pop())
             self.r.animate(currentAnim, currentEntity)
-        except: print("No animations.")
+        except:
+            pass
 
-class title(State):
+class Title(State):
     def __init__(self):
         State.__init__(self)
 
@@ -46,14 +46,14 @@ class title(State):
         eh.handle_title_events(self, eventList)
 
     def render(self):
-        self.r.renderBackground()
+        self.r.render_background()
         self.r.renderTitleScreen()
         pygame.display.flip()
 
-    def cleanUp(self):
+    def clean_up(self):
         print("Cleaning up title")
 
-class levelSelect(State):
+class LevelSelect(State):
     def __init__(self):
         State.__init__(self)
 
@@ -63,16 +63,14 @@ class levelSelect(State):
         eh.handle_level_events(self, eventList)
 
     def render(self):
-        self.r.renderBackground()
-        self.r.render_entities(self.entities)
-        self.play_next_animation()
-        #self.r.renderLevelSelect()
+        self.r.render_background()
+        self.r.renderLevelSelect()
         pygame.display.flip()
 
-    def cleanUp(self):
+    def clean_up(self):
         print("Cleaning up levelSelect")
 
-class rosterMenu(State):
+class RosterMenu(State):
     def __init__(self):
         State.__init__(self)
 
@@ -84,23 +82,54 @@ class rosterMenu(State):
     def render(self):
         print("nothing to render")
         
-    def cleanUp(self):
+    def clean_up(self):
             print("Cleaning up rosterMenu")
+
+class Combat(State):
+    def __init__(self):
+        State.__init__(self)
+        walkRight = [pygame.image.load('media/R1.png'), pygame.image.load('media/R2.png'), pygame.image.load('media/R3.png'), pygame.image.load('media/R4.png'), pygame.image.load('media/R5.png'), pygame.image.load('media/R6.png'), pygame.image.load('media/R7.png'), pygame.image.load('media/R8.png'), pygame.image.load('media/R9.png')]
+        walkLeft = [pygame.image.load('media/L1.png'), pygame.image.load('media/L2.png'), pygame.image.load('media/L3.png'), pygame.image.load('media/L4.png'), pygame.image.load('media/L5.png'), pygame.image.load('media/L6.png'), pygame.image.load('media/L7.png'), pygame.image.load('media/L8.png'), pygame.image.load('media/L9.png')]
+        char = pygame.image.load('media/standing.png')
+        
+        man = entity.Unit(State, 0, 0, 64, 64, char, walkRight, walkLeft)
+        other = entity.Unit(State, 5, 0, 64, 64, char, walkRight, walkLeft)
+
+        State.entities.append(man)
+        State.entities.append(other)
+        State.current_entity = man
+
+    def handle_events(self):
+        eventList = pygame.event.get()
+        eh.handle_system_events(self, eventList)
+        eh.handle_combat_events(self, eventList)
+        
+    def render(self):
+        self.r.render_background()
+        self.r.render_entities(self.entities)
+        self.play_next_animation()
+        pygame.display.flip()
+
+    def clean_up(self):
+        print("Cleaning up combat arena")
+        owner.entities = []
+        
 
     
 stateinfo = {
-    'title': title(),
-    'turn': levelSelect(),
-    'roster': rosterMenu()
+    'title': Title(),
+    'levelSelect': LevelSelect(),
+    'roster': RosterMenu(),
+    'combat': Combat()
 }
     
-def updateState(State):
+def update_state(State):
     if State.done == True:
         if State.next != None:
             temp = stateinfo[State.next]
             State.next = None
             State.done = False
-            State.cleanUp()
+            State.clean_up()
             return temp
     else:
         return State

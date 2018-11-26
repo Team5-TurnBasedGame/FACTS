@@ -1,8 +1,8 @@
 import sys
 import pygame
 
-class entity():
-    def __init__(self, game, x, y, width, height, char, unit = None):
+class Entity:
+    def __init__(self, game, x, y, width, height, char):
         self.game = game
         self.x = x
         self.y = y
@@ -12,7 +12,6 @@ class entity():
         self.height = height
         self.vel = 12 #number of pixels the image must move before the next frame of animation plays
         self.char = char
-        self.unit = unit
 
     def draw(self,win):
         win.blit(self.char, (self.displayX, self.displayY))
@@ -21,20 +20,26 @@ class entity():
         self.x = new_x
         self.y = new_y
 
-class unit():
-    def __init__(self, walkRight, walkLeft, hp=10, spd=5, atk=3, ranged=None, ai=None):
+class Unit(Entity):
+    def __init__(self, game, x, y, width, height, char, walkRight, walkLeft, hp=10, spd=5, atk=3, ai=None):
+        Entity.__init__(self, game, x, y, width, height, char)
         self.hp = hp
         self.spd = spd
         self.atk = atk
         self.walkRight = walkRight
         self.walkLeft = walkLeft
         self.ai = ai
+        self.guide = []
 
-    def canMoveTo(self, destinationX, destinationY):
-        if abs(destinationX - self.x) + abs(destinationY - self.y) > spd:
+    def can_move_to(self, destinationX, destinationY):
+        if abs(destinationX - self.x) + abs(destinationY - self.y) > self.spd:
             return False
         else:
             return True
+
+    def move(self):
+        (x,y) = self.guide.pop()
+        self.move_to(x,y)
 
     def move_to(self, x, y):
         distanceX = x - self.x
@@ -42,16 +47,16 @@ class unit():
 
         if (distanceX > 0):
             for i in range(0, distanceX):
-                move_right()
+                self.move_right()
         if (distanceX < 0):
             for i in range(distanceX, 0):
-                move_left()
+                self.move_left()
         if (distanceY > 0):
             for i in range(0, distanceY):
-                move_down()
+                self.move_down()
         if (distanceY < 0):
             for i in range(distanceY, 0):
-                move_up()
+                self.move_up()
         
     def move_right(self):
         self.x -= 1
@@ -65,9 +70,48 @@ class unit():
     def move_left(self):
         self.x += 1
         self.game.animations.append(("left", self))
+
+    def move_guide(self, direction):
+        if direction == 'left':
+            deltaX = -1
+            deltaY = 0
+        if direction == 'right':
+            deltaX = 1
+            deltaY = 0
+        if direction == 'up':
+            deltaX = 0
+            deltaY = -1
+        if direction == 'down':
+            deltaX = 0
+            deltaY = 1
+
+        if self.guide == []:
+            destinationX = self.x + deltaX
+            destinationY = self.y + deltaY
+        else:
+            tile = self.guide.pop()
+            destinationX = tile[0] + deltaX
+            destinationY = tile[1] + deltaY
+            
+        if self.can_move_to(destinationX, destinationY):
+            if self.guide == []:
+                self.guide.append((destinationX, destinationY))
+            else:
+                if tile == (destinationX, destinationY):
+                    return
+                else:
+                    self.guide.append(tile)
+                    self.guide.append((destinationX, destinationY))
+        else:
+            self.guide.append(tile)
+            print("Can't move here")
         
     def attack(self, entity):
-        entity.takeDamage(self.atk)
+        entity.take_damage(self.atk)
 
-    def takeDamage(self, damage):
+    def take_damage(self, damage):
         self.hp -= damage
+
+class ai():
+    def take_turn(self):
+        print("The entity contemplates life.")

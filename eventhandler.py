@@ -14,14 +14,14 @@ def handle_title_events(State, eventList):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 State.done = True
-                State.next = 'turn'
+                State.next = 'levelSelect'
 
 def handle_level_events(State, eventList):
     for event in eventList:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 State.done = True
-                State.next = 'roster'
+                State.next = 'combat'
             if event.key == pygame.K_RIGHT:
                 State.done = True
                 State.next = 'title'
@@ -32,3 +32,21 @@ def handle_roster_events(State, eventList):
             if event.key == pygame.K_LEFT:
                 State.done = True
                 State.next = 'title'
+
+def handle_combat_events(State, eventList):
+    for event in eventList:
+        if event.type == pygame.KEYDOWN:
+            try:
+                if event.key == pygame.K_LEFT:
+                    State.current_entity.move_guide('left')
+                if event.key == pygame.K_RIGHT:
+                    State.current_entity.move_guide('right')
+                if event.key == pygame.K_UP:
+                    State.current_entity.move_guide('up')
+                if event.key == pygame.K_DOWN:
+                    State.current_entity.move_guide('down')
+                if event.key == pygame.K_RETURN:
+                    State.current_entity.move()
+            except AttributeError as e:
+                print("Entity cannot move!")
+                print(e)

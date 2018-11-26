@@ -12,21 +12,21 @@ class Renderer:
         
     def render(self):
 
-        self.renderBackground()
+        self.render_background()
         pygame.display.flip()
 
-    def animate(self, currentAnim, currentEntity):
-        if currentAnim == "right":
-            self.walkRight(currentEntity)
-        elif currentAnim == "left":
-            self.walkLeft(currentEntity)
-        elif currentAnim == "up":
-            self.walkUp(currentEntity)
-        elif currentAnim == "down":
-            self.walkDown(currentEntity)
+    def animate(self, anim, currentEntity):
+        if anim == "right":
+            self.walk_right(currentEntity)
+        elif anim == "left":
+            self.walk_left(currentEntity)
+        elif anim == "up":
+            self.walk_up(currentEntity)
+        elif anim == "down":
+            self.walk_down(currentEntity)
         pygame.display.flip()
 
-    def renderBackground(self):
+    def render_background(self):
         black = 0, 0, 0
         self.screen.fill(black)
 
@@ -48,15 +48,15 @@ class Renderer:
         green = 0, 255, 0
         self.screen.fill(green)
 
-    def walkRight(self, entity):
+    def walk_right(self, entity):
         counter = 0
         n = 0
         while counter < 76:
-            self.renderBackground()
+            self.render_background()
             entity.displayX += entity.vel
             counter += entity.vel
             if n < 8:
-                entity.char = entity.walkRight[n]
+                entity.char = entity.walk_right[n]
                 n += 1
             else:
                 n = 0
@@ -65,16 +65,16 @@ class Renderer:
         entity.char = pygame.image.load('media/standing.png')
         
 
-    def walkLeft(self, entity):
+    def walk_left(self, entity):
         counter = 0
         n = 0
         while counter < 76:
-            self.renderBackground()
+            self.render_background()
             entity.displayX -= entity.vel
             counter += entity.vel
             print(counter)
             if n < 8:
-                entity.char = entity.walkLeft[n]
+                entity.char = entity.walk_left[n]
                 n += 1
             else:
                 n = 0
@@ -82,20 +82,20 @@ class Renderer:
             pygame.display.flip()
         entity.char = pygame.image.load('media/standing.png')
 
-    def walkUp(self, entity):
+    def walk_up(self, entity):
         counter = 0
         while counter < 76:
-            self.renderBackground()
+            self.render_background()
             entity.displayY -= entity.vel
             counter += entity.vel
             entity.draw(self.screen)
             pygame.display.flip()
         entity.char = pygame.image.load('media/standing.png')
 
-    def walkDown(self, entity):
+    def walk_down(self, entity):
         counter = 0
         while counter < 76:
-            self.renderBackground()
+            self.render_background()
             entity.displayY += entity.vel
             counter += entity.vel
             entity.draw(self.screen)
