@@ -24,6 +24,8 @@ class Renderer:
             self.walk_up(currentEntity)
         elif anim == "down":
             self.walk_down(currentEntity)
+        elif anim == "die":
+            self.die(currentEntity)
         pygame.display.flip()
 
     def render_background(self):
@@ -101,3 +103,6 @@ class Renderer:
             entity.draw(self.screen)
             pygame.display.flip()
         entity.char = pygame.image.load('media/standing.png')
+
+    def die(self, entity):
+        pass #death animation

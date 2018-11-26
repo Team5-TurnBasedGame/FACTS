@@ -13,7 +13,7 @@ class Entity:
         self.vel = 12 #number of pixels the image must move before the next frame of animation plays
         self.char = char
 
-    def draw(self,win):
+    def draw(self, win):
         win.blit(self.char, (self.displayX, self.displayY))
 
     def relocate(self, new_x, new_y):
@@ -21,15 +21,22 @@ class Entity:
         self.y = new_y
 
 class Unit(Entity):
-    def __init__(self, game, x, y, width, height, char, walkRight, walkLeft, hp=10, spd=5, atk=3, ai=None):
+    def __init__(self, game, x, y, width, height, char, walkRight, walkLeft, hp=10, spd=5, atk=3):
         Entity.__init__(self, game, x, y, width, height, char)
         self.hp = hp
         self.spd = spd
         self.atk = atk
         self.walkRight = walkRight
         self.walkLeft = walkLeft
-        self.ai = ai
         self.guide = []
+
+    def draw(self, win):
+        win.blit(self.char, (self.displayX, self.displayY))
+        for tile in self.guide:
+            (x,y) = tile
+            x *= 76
+            y *= 76
+            win.blit(self.char, (x, y))
 
     def can_move_to(self, destinationX, destinationY):
         if abs(destinationX - self.x) + abs(destinationY - self.y) > self.spd:
@@ -38,8 +45,10 @@ class Unit(Entity):
             return True
 
     def move(self):
-        (x,y) = self.guide.pop()
-        self.move_to(x,y)
+        self.guide.reverse()
+        for tile in self.guide:
+            (x,y) = self.guide.pop()
+            self.move_to(x,y)
 
     def move_to(self, x, y):
         distanceX = x - self.x
@@ -112,6 +121,6 @@ class Unit(Entity):
     def take_damage(self, damage):
         self.hp -= damage
 
-class ai():
+class Ai(Entity):
     def take_turn(self):
         print("The entity contemplates life.")

@@ -18,7 +18,7 @@ class State:
         self.r = renderer.Renderer(self.screen)
 
     def resolve_changes(self):
-        print()
+        pass
 
     def add_entity(self, entity):
         self.entities.append(entity)
@@ -35,6 +35,15 @@ class State:
             self.r.animate(currentAnim, currentEntity)
         except:
             pass
+
+    def next_entity(self):
+        current_index = self.entities.index(self.current_entity)
+        if current_index+1 < self.entities.len():
+            self.current_entity = self.entities[current_index + 1]
+        else:
+            self.current_entity = self.entities[0]
+        if self.current_entity.hp <= 0:
+            self.animations.append(("die", self.current_entity))
 
 class Title(State):
     def __init__(self):
@@ -99,10 +108,20 @@ class Combat(State):
         State.entities.append(other)
         State.current_entity = man
 
+        self.action = None
+
     def handle_events(self):
         eventList = pygame.event.get()
         eh.handle_system_events(self, eventList)
-        eh.handle_combat_events(self, eventList)
+        if not hasattr(State.current_entity, 'take_turn'): #entities with an AI component are not player-controlled
+            if self.action == None:
+                eh.handle_combat_events(self, eventList)
+            elif self.action == 'move':
+                eh.handle_movement_events(self, eventList)
+            elif self.action == 'attack':
+                eh.handle_attack_events(self, eventList)
+        else:
+            current_entity.take_turn()
         
     def render(self):
         self.r.render_background()
@@ -113,6 +132,7 @@ class Combat(State):
     def clean_up(self):
         print("Cleaning up combat arena")
         owner.entities = []
+
         
 
     

@@ -36,6 +36,16 @@ def handle_roster_events(State, eventList):
 def handle_combat_events(State, eventList):
     for event in eventList:
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_x:
+                print("attack state")
+                State.action = 'attack'
+            if event.key == pygame.K_c:
+                print("move state")
+                State.action = 'move'
+
+def handle_movement_events(State, eventList):
+    for event in eventList:
+        if event.type == pygame.KEYDOWN:
             try:
                 if event.key == pygame.K_LEFT:
                     State.current_entity.move_guide('left')
@@ -47,6 +57,31 @@ def handle_combat_events(State, eventList):
                     State.current_entity.move_guide('down')
                 if event.key == pygame.K_RETURN:
                     State.current_entity.move()
+                    State.next_entity()
+                if event.key == pygame.K_c:
+                    State.next_action = None
             except AttributeError as e:
                 print("Entity cannot move!")
                 print(e)
+
+def handle_attack_events(State, eventList):
+    for event in eventList:
+        if event.type == pygame.KEYDOWN:
+            try:
+                if event.key == pygame.K_LEFT:
+                    State.current_entity.attack_guide('left')
+                if event.key == pygame.K_RIGHT:
+                    State.current_entity.attack_guide('right')
+                if event.key == pygame.K_UP:
+                    State.current_entity.attack_guide('up')
+                if event.key == pygame.K_DOWN:
+                    State.current_entity.attack_guide('down')
+                if event.key == pygame.K_RETURN:
+                    State.current_entity.attack()
+                    state.next_entity()
+                if event.key == pygame.K_x:
+                    State.next_action = None
+            except AttributeError as e:
+                print("Entity cannot attack!")
+                print(e) 
+                
