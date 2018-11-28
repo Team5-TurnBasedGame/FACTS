@@ -57,7 +57,6 @@ def handle_movement_events(State, eventList):
                     State.current_entity.move_guide('down')
                 if event.key == pygame.K_RETURN:
                     State.current_entity.move()
-                    State.next_entity()
                 if event.key == pygame.K_c:
                     State.next_action = None
             except AttributeError as e:
@@ -78,7 +77,6 @@ def handle_attack_events(State, eventList):
                     State.current_entity.attack_guide('down')
                 if event.key == pygame.K_RETURN:
                     State.current_entity.attack()
-                    state.next_entity()
                 if event.key == pygame.K_x:
                     State.next_action = None
             except AttributeError as e:
