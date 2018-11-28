@@ -6,11 +6,11 @@ class Entity:
         self.game = game
         self.x = x
         self.y = y
-        self.displayX = x * 76
-        self.displayY = y * 76
+        self.displayX = x * 50
+        self.displayY = y * 50
         self.width = width
         self.height = height
-        self.vel = 12 #number of pixels the image must move before the next frame of animation plays
+        self.vel = 5 #number of pixels the image must move before the next frame of animation plays
         self.char = char
 
     def draw(self, win):
@@ -21,12 +21,14 @@ class Entity:
         self.y = new_y
 
 class Unit(Entity):
-    def __init__(self, game, x, y, width, height, char, walkRight, walkLeft, hp=10, spd=5, atk=3):
+    def __init__(self, game, x, y, width, height, char, standing, walkRight, walkLeft, hp=10, spd=5, atk=3):
         Entity.__init__(self, game, x, y, width, height, char)
         self.hp = hp
         self.spd = spd
         self.atk = atk
-        self.walkRight = walkRight
+        self.char = char
+        self.standing = standing
+        self.walkRight = walkRight.copy()
         self.walkLeft = walkLeft
         self.guide = []
 
@@ -34,8 +36,8 @@ class Unit(Entity):
         win.blit(self.char, (self.displayX, self.displayY))
         for tile in self.guide:
             (x,y) = tile
-            x *= 76
-            y *= 76
+            x *= 50
+            y *= 50
             win.blit(self.char, (x, y))
 
     def can_move_to(self, destinationX, destinationY):

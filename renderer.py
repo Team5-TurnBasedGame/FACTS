@@ -5,9 +5,9 @@ class Renderer:
 
         self.tilewidth, self.tileheight = screen
         self.tiles = [[0] * self.tileheight for i in range(self.tilewidth)]
-        self.size = self.width, self.height = self.tileheight*76, self.tilewidth*76
+        self.size = self.width, self.height = self.tileheight*50, self.tilewidth*50
         self.screen = pygame.display.set_mode(self.size)
-        self.square = pygame.image.load("square.png")
+        self.square = pygame.image.load("media/grass.png")
         self.squarerect = self.square.get_rect()
         
     def render(self):
@@ -34,8 +34,8 @@ class Renderer:
 
         for i in range(self.width):
             for j in range(self.height):
-                self.squarerect.top = i*76
-                self.squarerect.left = j*76
+                self.squarerect.top = i*50
+                self.squarerect.left = j*50
                 self.screen.blit(self.square, self.squarerect)
 
     def render_entities(self, entities):
@@ -51,58 +51,73 @@ class Renderer:
         self.screen.fill(green)
 
     def walk_right(self, entity):
+        walkRight = [pygame.image.load('media/sprites/SwordsMan/WR/1.png'), pygame.image.load('media/sprites/SwordsMan/WR/2.png'), pygame.image.load('media/sprites/SwordsMan/WR/3.png'), pygame.image.load('media/sprites/SwordsMan/WR/4.png'), pygame.image.load('media/sprites/SwordsMan/WR/5.png'), pygame.image.load('media/sprites/SwordsMan/WR/6.png'), pygame.image.load('media/sprites/SwordsMan/WR/7.png'), pygame.image.load('media/sprites/SwordsMan/WR/8.png'), pygame.image.load('media/sprites/SwordsMan/WR/9.png')]
         counter = 0
         n = 0
-        while counter < 76:
+        while counter < 50:
             self.render_background()
             entity.displayX += entity.vel
             counter += entity.vel
-            if n < 8:
-                entity.char = entity.walk_right[n]
+            if (n < 9):
+                entity.char = walkRight[n]
                 n += 1
             else:
                 n = 0
             entity.draw(self.screen)
             pygame.display.flip()
-        entity.char = pygame.image.load('media/standing.png')
+        entity.char = entity.standing
         
 
     def walk_left(self, entity):
+        walkLeft = [pygame.image.load('media/sprites/SwordsMan/WL/1.png'), pygame.image.load('media/sprites/SwordsMan/WL/2.png'), pygame.image.load('media/sprites/SwordsMan/WL/3.png'), pygame.image.load('media/sprites/SwordsMan/WL/4.png'), pygame.image.load('media/sprites/SwordsMan/WL/5.png'), pygame.image.load('media/sprites/SwordsMan/WL/6.png'), pygame.image.load('media/sprites/SwordsMan/WL/7.png'), pygame.image.load('media/sprites/SwordsMan/WL/8.png'), pygame.image.load('media/sprites/SwordsMan/WL/9.png')]
         counter = 0
         n = 0
-        while counter < 76:
+        while counter < 50:
             self.render_background()
             entity.displayX -= entity.vel
             counter += entity.vel
-            print(counter)
-            if n < 8:
-                entity.char = entity.walk_left[n]
+            if (n < 9):
+                entity.char = walkLeft[n]
                 n += 1
             else:
                 n = 0
             entity.draw(self.screen)
             pygame.display.flip()
-        entity.char = pygame.image.load('media/standing.png')
+        entity.char = entity.standing
 
     def walk_up(self, entity):
+        walkUp = [pygame.image.load('media/sprites/SwordsMan/WU/1.png'), pygame.image.load('media/sprites/SwordsMan/WU/2.png'), pygame.image.load('media/sprites/SwordsMan/WU/3.png'), pygame.image.load('media/sprites/SwordsMan/WU/4.png'), pygame.image.load('media/sprites/SwordsMan/WU/5.png'), pygame.image.load('media/sprites/SwordsMan/WU/6.png'), pygame.image.load('media/sprites/SwordsMan/WU/7.png'), pygame.image.load('media/sprites/SwordsMan/WU/8.png'), pygame.image.load('media/sprites/SwordsMan/WU/9.png')]
         counter = 0
-        while counter < 76:
+        n=0
+        while counter < 50:
             self.render_background()
             entity.displayY -= entity.vel
             counter += entity.vel
+            if n < 8:
+                entity.char = walkUp[n]
+                n += 1
+            else:
+                n = 0
             entity.draw(self.screen)
             pygame.display.flip()
-        entity.char = pygame.image.load('media/standing.png')
+        entity.char = entity.standing
 
     def walk_down(self, entity):
+        walkDown = [pygame.image.load('media/sprites/SwordsMan/WD/1.png'), pygame.image.load('media/sprites/SwordsMan/WD/2.png'), pygame.image.load('media/sprites/SwordsMan/WD/3.png'), pygame.image.load('media/sprites/SwordsMan/WD/4.png'), pygame.image.load('media/sprites/SwordsMan/WD/5.png'), pygame.image.load('media/sprites/SwordsMan/WD/6.png'), pygame.image.load('media/sprites/SwordsMan/WD/7.png'), pygame.image.load('media/sprites/SwordsMan/WD/8.png'), pygame.image.load('media/sprites/SwordsMan/WD/9.png')]
         counter = 0
-        while counter < 76:
+        n = 0
+        while counter < 50:
             self.render_background()
             entity.displayY += entity.vel
             counter += entity.vel
+            if (n < 9):
+                entity.char = walkDown[n]
+                n += 1
+            else:
+                n = 0
             entity.draw(self.screen)
             pygame.display.flip()
-        entity.char = pygame.image.load('media/standing.png')
-
+        entity.char = entity.standing
+        
     def die(self, entity):
         pass #death animation
