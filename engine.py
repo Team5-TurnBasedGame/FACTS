@@ -3,19 +3,28 @@ import pygame
 import renderer
 import eventhandler
 import logic
+import entity
 pygame.init()
 
-n = 10
-m = 10
 
-r = renderer.Renderer(n, m)
-
-
-
+pygame.display.set_caption("First Game")
 clock = pygame.time.Clock()
+game = logic.Title()
 
-while 1:
-    eventhandler.handle_events()
-    logic.resolve_changes()
-    r.render()
-    clock.tick(15)
+wtev = False
+
+while (not game.quit):
+    game.handle_events()
+    game.resolve_changes()
+    game.render()
+    game = logic.update_state(game)
+    clock.tick(10)
+    
+    if wtev:
+        game.animations.append(("down", game.get_current_entity()))
+        game.animations.append(("down", game.get_current_entity()))
+        wtev = False
+
+pygame.display.quit()
+pygame.quit()
+sys.exit()
