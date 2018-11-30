@@ -21,18 +21,15 @@ class Entity:
         self.y = new_y
 
 class Unit(Entity):
-    def __init__(self, game, x, y, width, height, char, standing, walkRight, walkLeft, walkUp, walkDown, hp=10, spd=5, atk=3):
+    def __init__(self, game, x, y, width, height, char, standing, walkRight, walkLeft, hp=10, spd=5, atk=3):
         Entity.__init__(self, game, x, y, width, height, char)
         self.hp = hp
         self.spd = spd
         self.atk = atk
         self.char = char
         self.standing = standing
-        self.walkRight = walkRight
+        self.walkRight = walkRight.copy()
         self.walkLeft = walkLeft
-        self.walkUp = walkUp
-        self.walkDown = walkDown
-        
         self.guide = []
 
     def draw(self, win):
@@ -52,10 +49,8 @@ class Unit(Entity):
     def move(self):
         self.guide.reverse()
         for tile in self.guide:
-            (x,y) = tile
+            (x,y) = self.guide.pop()
             self.move_to(x,y)
-            self.guide = []
-        self.game.next_entity()
 
     def move_to(self, x, y):
         distanceX = x - self.x
@@ -75,7 +70,7 @@ class Unit(Entity):
                 self.move_up()
         
     def move_right(self):
-        self.x += 1
+        self.x -= 1
         self.game.animations.append(("right", self))
     def move_up(self):
         self.y -= 1
@@ -84,14 +79,10 @@ class Unit(Entity):
         self.y += 1
         self.game.animations.append(("down", self))
     def move_left(self):
-        self.x -= 1
+        self.x += 1
         self.game.animations.append(("left", self))
 
     def move_guide(self, direction):
-
-        for item in self.guide:
-            print(item)
-        
         if direction == 'left':
             deltaX = -1
             deltaY = 0
@@ -128,7 +119,6 @@ class Unit(Entity):
         
     def attack(self, entity):
         entity.take_damage(self.atk)
-        self.game.next_entity()
 
     def take_damage(self, damage):
         self.hp -= damage
@@ -136,4 +126,3 @@ class Unit(Entity):
 class Ai(Entity):
     def take_turn(self):
         print("The entity contemplates life.")
-        self.game.next_entity()
