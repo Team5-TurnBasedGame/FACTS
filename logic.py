@@ -40,8 +40,6 @@ class State:
             self.current_entity = self.entities[current_index + 1]
         else:
             self.current_entity = self.entities[0]
-        if self.current_entity.hp <= 0:
-            self.current_entity.die()
 
 class Title(State):
     def __init__(self):
@@ -111,6 +109,7 @@ class Combat(State):
         #State.entities.append(units.make_spearman(self, 9, 3))
         #State.entities.append(units.make_wizardman(self, 9, 4))
         State.entities.append(units.make_GoblinMan(self, 5,4))
+        State.entities.append(units.make_TrollMan(self, 5,5))
         
         State.current_entity = State.entities[0]
 
@@ -119,20 +118,27 @@ class Combat(State):
     def handle_events(self):
         eventList = pygame.event.get()
         eh.handle_system_events(self, eventList)
-        if self.current_entity.ai == None: #entities with an AI component are not player-controlled
+        if self.current_entity.team == 'player': #entities with an AI component are not player-controlled
             if self.action == None:
-                eh.handle_combat_events(self, eventList)
+                self.action = 'move'
             elif self.action == 'move':
                 eh.handle_movement_events(self, eventList)
             elif self.action == 'attack':
                 eh.handle_attack_events(self, eventList)
+        elif self.current_entity.team == 'enemy':
+            self.current_entity.take_turn()
         else:
-            self.current_entity.ai.take_turn()
+            self.next_entity()
 
     def resolve_changes(self):
+        for e in self.entities:
+            if e.hp <= 0 and e.team != 'dead':
+                e.die()
         if self.player_gameover():
+            self.done = True
             self.next = 'levelSelect'
         elif self.enemy_gameover():
+            self.done = True
             self.next = 'levelSelect'
         else:
             pass
@@ -145,7 +151,8 @@ class Combat(State):
 
     def clean_up(self):
         print("Cleaning up combat arena")
-        owner.entities = []
+        self.entities = []
+        self.animations = []
 
     def player_gameover(self):
         playerAllDead = True
