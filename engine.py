@@ -6,8 +6,6 @@ import logic
 import entity
 pygame.init()
 
-n = 10
-m = 10
 
 pygame.display.set_caption("First Game")
 clock = pygame.time.Clock()

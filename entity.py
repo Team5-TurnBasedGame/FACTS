@@ -6,11 +6,11 @@ class Entity:
         self.game = game
         self.x = x
         self.y = y
-        self.displayX = x * 76
-        self.displayY = y * 76
+        self.displayX = x * 65
+        self.displayY = y * 65
         self.width = width
         self.height = height
-        self.vel = 12 #number of pixels the image must move before the next frame of animation plays
+        self.vel = 5 #number of pixels the image must move before the next frame of animation plays
         self.char = char
 
     def draw(self, win):
@@ -21,21 +21,31 @@ class Entity:
         self.y = new_y
 
 class Unit(Entity):
-    def __init__(self, game, x, y, width, height, char, walkRight, walkLeft, hp=10, spd=5, atk=3):
+    def __init__(self, game, x, y, width, height, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, hp=10, spd=5, atk=3, ai=None, team="enemy"):
         Entity.__init__(self, game, x, y, width, height, char)
         self.hp = hp
         self.spd = spd
         self.atk = atk
+        self.char = char
+        self.standing = standing
         self.walkRight = walkRight
         self.walkLeft = walkLeft
+        self.walkUp = walkUp
+        self.walkDown = walkDown
+        self.attack = attack
+        self.death = death
+        self.dead = dead
+        self.ai = ai
+        self.team = team
+        
         self.guide = []
 
     def draw(self, win):
         win.blit(self.char, (self.displayX, self.displayY))
         for tile in self.guide:
             (x,y) = tile
-            x *= 76
-            y *= 76
+            x *= 65
+            y *= 65
             win.blit(self.char, (x, y))
 
     def can_move_to(self, destinationX, destinationY):
@@ -47,8 +57,10 @@ class Unit(Entity):
     def move(self):
         self.guide.reverse()
         for tile in self.guide:
-            (x,y) = self.guide.pop()
+            (x,y) = tile
             self.move_to(x,y)
+            self.guide = []
+        self.game.next_entity()
 
     def move_to(self, x, y):
         distanceX = x - self.x
@@ -68,7 +80,7 @@ class Unit(Entity):
                 self.move_up()
         
     def move_right(self):
-        self.x -= 1
+        self.x += 1
         self.game.animations.append(("right", self))
     def move_up(self):
         self.y -= 1
@@ -77,10 +89,14 @@ class Unit(Entity):
         self.y += 1
         self.game.animations.append(("down", self))
     def move_left(self):
-        self.x += 1
+        self.x -= 1
         self.game.animations.append(("left", self))
 
     def move_guide(self, direction):
+
+        for item in self.guide:
+            print(item)
+        
         if direction == 'left':
             deltaX = -1
             deltaY = 0
@@ -115,12 +131,25 @@ class Unit(Entity):
             self.guide.append(tile)
             print("Can't move here")
         
-    def attack(self, entity):
+    def attack(self):
         entity.take_damage(self.atk)
+        self.game.next_entity()
 
     def take_damage(self, damage):
         self.hp -= damage
 
-class Ai(Entity):
+    def die(self):
+        self.animations.append(("die", self.current_entity))
+        self.team = "dead"
+
+class FighterAi():
+    def __init__(self, game):
+        self.game = game
+        
     def take_turn(self):
         print("The entity contemplates life.")
+        #self.take_damage(10)
+        self.game.next_entity()
+
+    def take_damage(self, damage):
+        self.hp -= damage

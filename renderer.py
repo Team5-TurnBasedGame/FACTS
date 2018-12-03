@@ -5,9 +5,9 @@ class Renderer:
 
         self.tilewidth, self.tileheight = screen
         self.tiles = [[0] * self.tileheight for i in range(self.tilewidth)]
-        self.size = self.width, self.height = self.tileheight*76, self.tilewidth*76
+        self.size = self.width, self.height = self.tileheight*65, self.tilewidth*65
         self.screen = pygame.display.set_mode(self.size)
-        self.square = pygame.image.load("square.png")
+        self.square = pygame.image.load("media/grass2.png")
         self.squarerect = self.square.get_rect()
         
     def render(self):
@@ -24,6 +24,8 @@ class Renderer:
             self.walk_up(currentEntity)
         elif anim == "down":
             self.walk_down(currentEntity)
+        elif anim == "attack":
+            self.attack(currentEntity)
         elif anim == "die":
             self.die(currentEntity)
         pygame.display.flip()
@@ -34,75 +36,142 @@ class Renderer:
 
         for i in range(self.width):
             for j in range(self.height):
-                self.squarerect.top = i*76
-                self.squarerect.left = j*76
+                self.squarerect.top = i*65
+                self.squarerect.left = j*65
                 self.screen.blit(self.square, self.squarerect)
 
     def render_entities(self, entities):
         for e in entities:
             e.draw(self.screen)
 
-    def renderTitleScreen(self):
+    def render_title_screen(self):
         blue = 0, 0, 255
         self.screen.fill(blue)
+        title_image = pygame.image.load("media/menus/facts.png")
+        title_image = pygame.transform.scale(title_image, (738, 415))
+        castle_image = pygame.image.load("media/menus/castle.jpg")
+        self.screen.blit(castle_image, (0, 0))
+        self.screen.blit(title_image, (0, -50))
 
     def renderLevelSelect(self):
         green = 0, 255, 0
         self.screen.fill(green)
+        green = 0, 255, 0
+        self.screen.fill(green)
+        level_image = pygame.image.load("media/menus/levelselect.png")
+        level_image = pygame.transform.scale(level_image, (455, 137))
+        first_image = pygame.image.load("media/menus/mission 1.png")
+        first_image = pygame.transform.scale(first_image, (249, 172))
+        second_image = pygame.image.load("media/menus/mission 2.png")
+        second_image = pygame.transform.scale(second_image, (249, 172))
+        third_image = pygame.image.load("media/menus/mission 3.png")
+        third_image = pygame.transform.scale(third_image, (249, 172))
+        one_key = pygame.image.load("media/menus/1.png")
+        one_key = pygame.transform.scale(one_key, (122, 133))
+        two_key = pygame.image.load("media/menus/2.png")
+        two_key = pygame.transform.scale(two_key, (122, 133))
+        three_key = pygame.image.load("media/menus/3.png")
+        three_key = pygame.transform.scale(three_key, (122, 133))
+        background = pygame.image.load("media/menus/grass.jpg")
+        background = pygame.transform.scale(background, (1443, 902))
+        self.screen.blit(background, (0, 0))
+        self.screen.blit(level_image, (150, 0))
+        self.screen.blit(first_image, (0, 175))
+        self.screen.blit(second_image, (250, 175))
+        self.screen.blit(third_image, (500, 175))
+        self.screen.blit(one_key, (65, 320))
+        self.screen.blit(two_key, (317, 320))
+        self.screen.blit(three_key, (567, 320))
 
     def walk_right(self, entity):
         counter = 0
         n = 0
-        while counter < 76:
+        while counter < 65:
             self.render_background()
             entity.displayX += entity.vel
             counter += entity.vel
-            if n < 8:
-                entity.char = entity.walk_right[n]
+            if (n < 9):
+                entity.char = entity.walkRight[n]
                 n += 1
             else:
                 n = 0
             entity.draw(self.screen)
             pygame.display.flip()
-        entity.char = pygame.image.load('media/standing.png')
+        entity.char = entity.standing
         
 
     def walk_left(self, entity):
         counter = 0
         n = 0
-        while counter < 76:
+        while counter < 65:
             self.render_background()
             entity.displayX -= entity.vel
             counter += entity.vel
-            print(counter)
-            if n < 8:
-                entity.char = entity.walk_left[n]
+            if (n < 9):
+                entity.char = entity.walkLeft[n]
                 n += 1
             else:
                 n = 0
             entity.draw(self.screen)
             pygame.display.flip()
-        entity.char = pygame.image.load('media/standing.png')
+        entity.char = entity.standing
 
     def walk_up(self, entity):
         counter = 0
-        while counter < 76:
+        n=0
+        while counter < 65:
             self.render_background()
             entity.displayY -= entity.vel
             counter += entity.vel
+            if n < 9:
+                entity.char = entity.walkUp[n]
+                n += 1
+            else:
+                n = 0
             entity.draw(self.screen)
             pygame.display.flip()
-        entity.char = pygame.image.load('media/standing.png')
+        entity.char = entity.standing
 
     def walk_down(self, entity):
         counter = 0
-        while counter < 76:
+        n = 0
+        while counter < 65:
             self.render_background()
             entity.displayY += entity.vel
             counter += entity.vel
+            if (n < 9):
+                entity.char = entity.walkDown[n]
+                n += 1
+            else:
+                n = 0
             entity.draw(self.screen)
             pygame.display.flip()
-        entity.char = pygame.image.load('media/standing.png')
+        entity.char = entity.standing
 
+    def attack(self, entity):
+        n = 0
+        while n < 7:
+            if (n == 6):
+                entity.char = entity.standing
+                pygame.display.flip()
+                n += 1
+            else:
+                self.render_background()
+                entity.char = entity.attack[n]
+                entity.draw(self.screen)
+                pygame.display.flip()
+                n += 1
+        
     def die(self, entity):
-        pass #death animation
+        n = 0
+        while n < 7:
+            if (n == 6):
+                entity.char = entity.dead
+                pygame.display.flip()
+                n += 1
+            else:
+                self.render_background()
+                entity.char = entity.death[n]
+                entity.draw(self.screen)
+                pygame.display.flip()
+                n += 1

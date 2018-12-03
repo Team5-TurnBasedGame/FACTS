@@ -1,6 +1,7 @@
 import sys
 import pygame
 import entity
+import units
 import renderer
 import eventhandler as eh
 
@@ -16,9 +17,6 @@ class State:
         self.previous = None
         self.screen = (10,10)
         self.r = renderer.Renderer(self.screen)
-
-    def resolve_changes(self):
-        pass
 
     def add_entity(self, entity):
         self.entities.append(entity)
@@ -38,12 +36,12 @@ class State:
 
     def next_entity(self):
         current_index = self.entities.index(self.current_entity)
-        if current_index+1 < self.entities.len():
+        if current_index+1 < len(self.entities):
             self.current_entity = self.entities[current_index + 1]
         else:
             self.current_entity = self.entities[0]
         if self.current_entity.hp <= 0:
-            self.animations.append(("die", self.current_entity))
+            self.current_entity.die()
 
 class Title(State):
     def __init__(self):
@@ -54,9 +52,12 @@ class Title(State):
         eh.handle_system_events(self, eventList)
         eh.handle_title_events(self, eventList)
 
+    def resolve_changes(self):
+        pass
+
     def render(self):
         self.r.render_background()
-        self.r.renderTitleScreen()
+        self.r.render_title_screen()
         pygame.display.flip()
 
     def clean_up(self):
@@ -70,6 +71,9 @@ class LevelSelect(State):
         eventList = pygame.event.get()
         eh.handle_system_events(self, eventList)
         eh.handle_level_events(self, eventList)
+
+    def resolve_changes(self):
+        pass
 
     def render(self):
         self.r.render_background()
@@ -88,6 +92,9 @@ class RosterMenu(State):
         eh.handle_system_events(self, eventList)
         eh.handle_roster_events(self, eventList)
 
+    def resolve_changes(self):
+        pass
+
     def render(self):
         print("nothing to render")
         
@@ -97,23 +104,22 @@ class RosterMenu(State):
 class Combat(State):
     def __init__(self):
         State.__init__(self)
-        walkRight = [pygame.image.load('media/R1.png'), pygame.image.load('media/R2.png'), pygame.image.load('media/R3.png'), pygame.image.load('media/R4.png'), pygame.image.load('media/R5.png'), pygame.image.load('media/R6.png'), pygame.image.load('media/R7.png'), pygame.image.load('media/R8.png'), pygame.image.load('media/R9.png')]
-        walkLeft = [pygame.image.load('media/L1.png'), pygame.image.load('media/L2.png'), pygame.image.load('media/L3.png'), pygame.image.load('media/L4.png'), pygame.image.load('media/L5.png'), pygame.image.load('media/L6.png'), pygame.image.load('media/L7.png'), pygame.image.load('media/L8.png'), pygame.image.load('media/L9.png')]
-        char = pygame.image.load('media/standing.png')
-        
-        man = entity.Unit(State, 0, 0, 64, 64, char, walkRight, walkLeft)
-        other = entity.Unit(State, 5, 0, 64, 64, char, walkRight, walkLeft)
 
-        State.entities.append(man)
-        State.entities.append(other)
-        State.current_entity = man
+        State.entities.append(units.make_swordsman(self, 4, 4))
+        State.entities.append(units.make_archerwoman(self, 9, 1))
+        #State.entities.append(units.make_elfwoman(self, 9, 2))
+        #State.entities.append(units.make_spearman(self, 9, 3))
+        #State.entities.append(units.make_wizardman(self, 9, 4))
+        State.entities.append(units.make_GoblinMan(self, 5,4))
+        
+        State.current_entity = State.entities[0]
 
         self.action = None
 
     def handle_events(self):
         eventList = pygame.event.get()
         eh.handle_system_events(self, eventList)
-        if not hasattr(State.current_entity, 'take_turn'): #entities with an AI component are not player-controlled
+        if self.current_entity.ai == None: #entities with an AI component are not player-controlled
             if self.action == None:
                 eh.handle_combat_events(self, eventList)
             elif self.action == 'move':
@@ -121,7 +127,15 @@ class Combat(State):
             elif self.action == 'attack':
                 eh.handle_attack_events(self, eventList)
         else:
-            current_entity.take_turn()
+            self.current_entity.ai.take_turn()
+
+    def resolve_changes(self):
+        if self.player_gameover():
+            self.next = 'levelSelect'
+        elif self.enemy_gameover():
+            self.next = 'levelSelect'
+        else:
+            pass
         
     def render(self):
         self.r.render_background()
@@ -133,8 +147,23 @@ class Combat(State):
         print("Cleaning up combat arena")
         owner.entities = []
 
+    def player_gameover(self):
+        playerAllDead = True
+        for e in self.entities:
+            if e.team == 'player':
+                playerAllDead = False
+        if playerAllDead: print("game over you lose")
+        return playerAllDead
         
 
+    def enemy_gameover(self):
+        enemyAllDead = True
+        for e in self.entities:
+            if e.team == 'enemy':
+                enemyAllDead = False
+        if enemyAllDead: print("you win!")
+        return enemyAllDead
+        
     
 stateinfo = {
     'title': Title(),
