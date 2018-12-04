@@ -219,7 +219,7 @@ class FighterAi(Unit):
     def take_turn(self):
         target = Entity(None, 999, 999, None, None, None) #dummy entity, arbitrarily far away
         for e in self.game.entities:
-            if self.team != e.team:
+            if self.team != e.team and e.team != 'dead':
                 if self.get_distance((e.x, e.y)) < self.get_distance((target.x, target.y)):
                     target = e
         (x,y) = (target.x, target.y)
@@ -239,6 +239,23 @@ class FighterAi(Unit):
     def move_towards(self, location):
         (x, y) = location
         print("The orc wants to move, but can't!")
+        for s in range(self.spd):
+            print("s: "+str(s))
+            print("selfloc = " +str((self.x, self.y)))
+            print("targetloc = " +str(location))
+            if self.x > x:
+                if self.can_move_to(self.x-1, self.y):
+                    self.move_left()
+            elif self.x < x:
+                if self.can_move_to(self.x+1, self.y):
+                    self.move_right()
+            elif self.y < y:
+                if self.can_move_to(self.x, self.y+1):
+                    self.move_down()
+            elif self.y > y:
+                if self.can_move_to(self.x, self.y-1):
+                    self.move_up()
+
 
     def get_distance(self, location):
         (x, y) = location
@@ -247,6 +264,7 @@ class FighterAi(Unit):
     def ai_deal_damage(self, target):
         print("The enemy delt damage!")
         target.take_damage(self.atk)
+        self.game.animations.insert(0, ("attack", self))
 
     def take_damage(self, damage):
         self.hp -= damage

@@ -12,17 +12,22 @@ def handle_system_events(State, eventList):
 def handle_title_events(State, eventList):
     for event in eventList:
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                State.done = True
-                State.next = 'levelSelect'
+            State.done = True
+            State.next = 'levelSelect'
 
 def handle_level_events(State, eventList):
     for event in eventList:
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_1:
                 State.done = True
-                State.next = 'combat'
-            if event.key == pygame.K_RIGHT:
+                State.next = 'combat1'
+            if event.key == pygame.K_2:
+                State.done = True
+                State.next = 'combat2'
+            if event.key == pygame.K_3:
+                State.done = True
+                State.next = 'combat3'
+            if event.key == pygame.K_RETURN:
                 State.done = True
                 State.next = 'title'
 

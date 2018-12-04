@@ -35,6 +35,8 @@ class State:
             pass
 
     def next_entity(self):
+        while len(self.animations): #wait for animation queue to empty
+            self.play_next_animation()
         current_index = self.entities.index(self.current_entity)
         if current_index+1 < len(self.entities):
             self.current_entity = self.entities[current_index + 1]
@@ -100,17 +102,26 @@ class RosterMenu(State):
             print("Cleaning up rosterMenu")
 
 class Combat(State):
-    def __init__(self):
+    def __init__(self, level):
         State.__init__(self)
+        if level == 1:
+            State.entities.append(units.make_swordsman(self, 4, 4))
+            State.entities.append(units.make_archerwoman(self, 9, 1))
+            #State.entities.append(units.make_elfwoman(self, 9, 2))
+            #State.entities.append(units.make_spearman(self, 9, 3))
+            #State.entities.append(units.make_wizardman(self, 9, 4))
+            State.entities.append(units.make_GoblinMan(self, 1,4))
+            State.entities.append(units.make_TrollMan(self, 1,5))
+        elif level == 2:
+            State.entities.append(units.make_archerwoman(self, 4, 4))
+            State.entities.append(units.make_archerwoman(self, 9, 1))
+            State.entities.append(units.make_TrollMan(self, 1,5))
+        elif level == 3:
+            State.entities.append(units.makewizardman(self, 1, 5))
+            State.entities.append(units.make_GoblinMan(self, 1,4))
+        else:
+            print("Error! Invalid level!")
 
-        State.entities.append(units.make_swordsman(self, 4, 4))
-        State.entities.append(units.make_archerwoman(self, 9, 1))
-        #State.entities.append(units.make_elfwoman(self, 9, 2))
-        #State.entities.append(units.make_spearman(self, 9, 3))
-        #State.entities.append(units.make_wizardman(self, 9, 4))
-        State.entities.append(units.make_GoblinMan(self, 5,4))
-        State.entities.append(units.make_TrollMan(self, 5,5))
-        
         State.current_entity = State.entities[0]
 
         self.action = None
@@ -176,7 +187,9 @@ stateinfo = {
     'title': Title(),
     'levelSelect': LevelSelect(),
     'roster': RosterMenu(),
-    'combat': Combat()
+    'combat1': Combat(1),
+    'combat2': Combat(2),
+    'combat3': Combat(3)
 }
     
 def update_state(State):
