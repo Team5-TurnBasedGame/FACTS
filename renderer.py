@@ -28,6 +28,10 @@ class Renderer:
             self.attack(currentEntity)
         elif anim == "die":
             self.die(currentEntity)
+        elif anim == "win":
+            self.win()
+        elif anim == "lose":
+            self.lose()
         pygame.display.flip()
 
     def render_background(self):
@@ -51,7 +55,7 @@ class Renderer:
         title_image = pygame.transform.scale(title_image, (738, 415))
         castle_image = pygame.image.load("media/menus/castle.jpg")
         self.screen.blit(castle_image, (0, 0))
-        self.screen.blit(title_image, (0, -50))
+        self.screen.blit(title_image, (-50, -50))
 
     def renderLevelSelect(self):
         green = 0, 255, 0
@@ -61,11 +65,11 @@ class Renderer:
         level_image = pygame.image.load("media/menus/levelselect.png")
         level_image = pygame.transform.scale(level_image, (455, 137))
         first_image = pygame.image.load("media/menus/mission 1.png")
-        first_image = pygame.transform.scale(first_image, (249, 172))
+        first_image = pygame.transform.scale(first_image, (191, 132))
         second_image = pygame.image.load("media/menus/mission 2.png")
-        second_image = pygame.transform.scale(second_image, (249, 172))
+        second_image = pygame.transform.scale(second_image, (191, 132))
         third_image = pygame.image.load("media/menus/mission 3.png")
-        third_image = pygame.transform.scale(third_image, (249, 172))
+        third_image = pygame.transform.scale(third_image, (191, 132))
         one_key = pygame.image.load("media/menus/1.png")
         one_key = pygame.transform.scale(one_key, (122, 133))
         two_key = pygame.image.load("media/menus/2.png")
@@ -75,13 +79,13 @@ class Renderer:
         background = pygame.image.load("media/menus/grass.jpg")
         background = pygame.transform.scale(background, (1443, 902))
         self.screen.blit(background, (0, 0))
-        self.screen.blit(level_image, (150, 0))
+        self.screen.blit(level_image, (90, 0))
         self.screen.blit(first_image, (0, 175))
-        self.screen.blit(second_image, (250, 175))
-        self.screen.blit(third_image, (500, 175))
-        self.screen.blit(one_key, (65, 320))
-        self.screen.blit(two_key, (317, 320))
-        self.screen.blit(three_key, (567, 320))
+        self.screen.blit(second_image, (230, 175))
+        self.screen.blit(third_image, (450, 175))
+        self.screen.blit(one_key, (35, 300))
+        self.screen.blit(two_key, (270, 300))
+        self.screen.blit(three_key, (490, 300))
 
     def walk_right(self, entity):
         counter = 0
@@ -175,3 +179,21 @@ class Renderer:
                 entity.draw(self.screen)
                 pygame.display.flip()
                 n += 1
+
+    def win(self):
+        n = 0
+        win = [pygame.image.load('media/win1/1.png'), pygame.image.load('media/win1/2.png'), pygame.image.load('media/win1/3.png'), pygame.image.load('media/win1/4.png'), pygame.image.load('media/win1/5.png'), pygame.image.load('media/win1/6.png'), pygame.image.load('media/win1/7.png'), pygame.image.load('media/win1/8.png'), pygame.image.load('media/win1/9.png'),pygame.image.load('media/win1/10.png'),pygame.image.load('media/win1/11.png'),pygame.image.load('media/win1/12.png'),pygame.image.load('media/win1/13.png'),pygame.image.load('media/win1/14.png'),pygame.image.load('media/win1/15.png'),pygame.image.load('media/win1/16.png'),pygame.image.load('media/win1/17.png'),pygame.image.load('media/win1/18.png'),pygame.image.load('media/win1/19.png'),]
+        while n < 19:
+            self.render_background()
+            self.screen.blit(win[n], (0, 0))
+            pygame.display.flip()
+            n += 1
+
+    def lose(self):
+        n = 0
+        lose = [pygame.image.load('media/lose/1.png'), pygame.image.load('media/lose/2.png'), pygame.image.load('media/lose/3.png'), pygame.image.load('media/lose/4.png'), pygame.image.load('media/lose/5.png'), pygame.image.load('media/lose/6.png'), pygame.image.load('media/lose/7.png'), pygame.image.load('media/lose/8.png'), pygame.image.load('media/lose/9.png'),pygame.image.load('media/lose/10.png'),pygame.image.load('media/lose/11.png'),pygame.image.load('media/lose/12.png'),pygame.image.load('media/lose/13.png'),pygame.image.load('media/lose/14.png'),pygame.image.load('media/lose/15.png'),pygame.image.load('media/lose/16.png'),pygame.image.load('media/lose/17.png'),pygame.image.load('media/lose/18.png'),pygame.image.load('media/lose/19.png'),]
+        while n < 19:
+            self.render_background()
+            self.screen.blit(lose[n], (0, 0))
+            pygame.display.flip()
+            n += 1

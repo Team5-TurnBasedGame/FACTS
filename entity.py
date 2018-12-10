@@ -213,8 +213,8 @@ class Unit(Entity):
         self.team = "dead"
 
 class FighterAi(Unit):
-    def __init__(self, game, x, y, width, height, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, team="enemy"):
-        Unit.__init__(self, game, x, y, width, height, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, team="enemy")
+    def __init__(self, game, x, y, width, height, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, hp=10, spd=5, attackdist=1, atk=3, team="enemy"):
+        Unit.__init__(self, game, x, y, width, height, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, hp=10, spd=5, attackdist=1, atk=3, team="enemy")
         
     def take_turn(self):
         target = Entity(None, 999, 999, None, None, None) #dummy entity, arbitrarily far away

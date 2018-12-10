@@ -12,6 +12,9 @@ def handle_system_events(State, eventList):
 def handle_title_events(State, eventList):
     for event in eventList:
         if event.type == pygame.KEYDOWN:
+            pygame.mixer.music.stop()
+            pygame.mixer.music.load('media/level.mp3')
+            pygame.mixer.music.play(-1)
             State.done = True
             State.next = 'levelSelect'
 
@@ -19,12 +22,21 @@ def handle_level_events(State, eventList):
     for event in eventList:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_1:
+                pygame.mixer.music.stop()
+                pygame.mixer.music.load('media/combat.mp3')
+                pygame.mixer.music.play(-1)
                 State.done = True
                 State.next = 'combat1'
             if event.key == pygame.K_2:
+                pygame.mixer.music.stop()
+                pygame.mixer.music.load('media/combat.mp3')
+                pygame.mixer.music.play(-1)
                 State.done = True
                 State.next = 'combat2'
             if event.key == pygame.K_3:
+                pygame.mixer.music.stop()
+                pygame.mixer.music.load('media/combat.mp3')
+                pygame.mixer.music.play(-1)
                 State.done = True
                 State.next = 'combat3'
             if event.key == pygame.K_RETURN:

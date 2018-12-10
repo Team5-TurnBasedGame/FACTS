@@ -14,7 +14,7 @@ def make_swordsman(State, X, Y):
     char = pygame.image.load('media/sprites/SwordsMan/standing.png')
     standing = pygame.image.load('media/sprites/SwordsMan/standing.png')
     dead = pygame.image.load('media/sprites/SwordsMan/dead.png')
-    return entity.Unit(State, X, Y, 50, 50, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, team = "player", atk=5)
+    return entity.Unit(State, X, Y, 50, 50, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, team = "player", atk=5, hp=15, spd=3)
 
 def make_archerwoman(State, X, Y):
     walkRight = [pygame.image.load('media/sprites/ArcherWoman/Walk/WR/1.png'), pygame.image.load('media/sprites/ArcherWoman/Walk/WR/2.png'), pygame.image.load('media/sprites/ArcherWoman/Walk/WR/3.png'), pygame.image.load('media/sprites/ArcherWoman/Walk/WR/4.png'), pygame.image.load('media/sprites/ArcherWoman/Walk/WR/5.png'), pygame.image.load('media/sprites/ArcherWoman/Walk/WR/6.png'), pygame.image.load('media/sprites/ArcherWoman/Walk/WR/7.png'), pygame.image.load('media/sprites/ArcherWoman/Walk/WR/8.png'), pygame.image.load('media/sprites/ArcherWoman/Walk/WR/9.png')]
@@ -28,7 +28,7 @@ def make_archerwoman(State, X, Y):
 
     standing = pygame.image.load('media/sprites/ArcherWoman/standing.png')
     dead = pygame.image.load('media/sprites/ArcherWoman/dead.png')
-    return entity.Unit(State, X, Y, 50, 50, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, attackdist=5, team = "player")
+    return entity.Unit(State, X, Y, 50, 50, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, attackdist=5, team = "player", hp=5)
 
 def make_elfwoman(State, X, Y):
     walkRight = [pygame.image.load('media/sprites/ElfWoman/Walk/WR/1.png'), pygame.image.load('media/sprites/ElfWoman/Walk/WR/2.png'), pygame.image.load('media/sprites/ElfWoman/Walk/WR/3.png'), pygame.image.load('media/sprites/ElfWoman/Walk/WR/4.png'), pygame.image.load('media/sprites/ElfWoman/Walk/WR/5.png'), pygame.image.load('media/sprites/ElfWoman/Walk/WR/6.png'), pygame.image.load('media/sprites/ElfWoman/Walk/WR/7.png'), pygame.image.load('media/sprites/ElfWoman/Walk/WR/8.png'), pygame.image.load('media/sprites/ElfWoman/Walk/WR/9.png')]
@@ -41,7 +41,7 @@ def make_elfwoman(State, X, Y):
     guidechar = pygame.image.load('media/outline.png')
     standing = pygame.image.load('media/sprites/ElfWoman/standing.png')
     dead = pygame.image.load('media/sprites/ElfWoman/dead.png')
-    return entity.Unit(State, X, Y, 50, 50, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, team = "player")
+    return entity.Unit(State, X, Y, 50, 50, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, team = "player",spd=7, hp=3, atk=15)
 
 def make_spearman(State, X, Y):
     walkRight = [pygame.image.load('media/sprites/SpearsMan/Walk/WR/1.png'), pygame.image.load('media/sprites/SpearsMan/Walk/WR/2.png'), pygame.image.load('media/sprites/SpearsMan/Walk/WR/3.png'), pygame.image.load('media/sprites/SpearsMan/Walk/WR/4.png'), pygame.image.load('media/sprites/SpearsMan/Walk/WR/5.png'), pygame.image.load('media/sprites/SpearsMan/Walk/WR/6.png'), pygame.image.load('media/sprites/SpearsMan/Walk/WR/7.png'), pygame.image.load('media/sprites/SpearsMan/Walk/WR/8.png'), pygame.image.load('media/sprites/SpearsMan/Walk/WR/9.png')]
@@ -54,7 +54,7 @@ def make_spearman(State, X, Y):
     guidechar = pygame.image.load('media/outline.png')
     standing = pygame.image.load('media/sprites/SpearsMan/standing.png')
     dead = pygame.image.load('media/sprites/SpearsMan/dead.png')
-    return entity.Unit(State, X, Y, 50, 50, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, team = "player")
+    return entity.Unit(State, X, Y, 50, 50, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, team = "player", attackdist=2, hp=18)
 
 
 def make_wizardman(State, X, Y):
@@ -68,7 +68,7 @@ def make_wizardman(State, X, Y):
     guidechar = pygame.image.load('media/outline.png')
     standing = pygame.image.load('media/sprites/WizardMan/standing.png')
     dead = pygame.image.load('media/sprites/WizardMan/dead.png')
-    return entity.Unit(State, X, Y, 64, 64, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, team = "player")
+    return entity.Unit(State, X, Y, 64, 64, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, team = "player",attackdist=9, spd=1, hp=3, atk=1)
 
 #################################
 #Enemy Units:
@@ -85,7 +85,7 @@ def make_GoblinMan(State, X, Y):
     guidechar = pygame.image.load('media/outline.png')
     standing = pygame.image.load('media/sprites/GoblinMan/standing.png')
     dead = pygame.image.load('media/sprites/GoblinMan/dead.png')
-    return entity.FighterAi(State, X, Y, 50, 50, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, team = "enemy")
+    return entity.FighterAi(State, X, Y, 50, 50, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, team = "enemy", hp=5,spd=7)
 
 def make_OrkMan(State, X, Y):
     walkRight = [pygame.image.load('media/sprites/OrkMan/Walk/WR/1.png'), pygame.image.load('media/sprites/OrkMan/Walk/WR/2.png'), pygame.image.load('media/sprites/OrkMan/Walk/WR/3.png'), pygame.image.load('media/sprites/OrkMan/Walk/WR/4.png'), pygame.image.load('media/sprites/OrkMan/Walk/WR/5.png'), pygame.image.load('media/sprites/OrkMan/Walk/WR/6.png'), pygame.image.load('media/sprites/OrkMan/Walk/WR/7.png'), pygame.image.load('media/sprites/OrkMan/Walk/WR/8.png'), pygame.image.load('media/sprites/OrkMan/Walk/WR/9.png')]
@@ -98,7 +98,7 @@ def make_OrkMan(State, X, Y):
     guidechar = pygame.image.load('media/outline.png')
     standing = pygame.image.load('media/sprites/OrkMan/standing.png')
     dead = pygame.image.load('media/sprites/OrkMan/dead.png')
-    return entity.FighterAi(State, X, Y, 50, 50, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, team = "enemy")
+    return entity.FighterAi(State, X, Y, 50, 50, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, team = "enemy",hp=12)
 
 def make_TrollMan(State, X, Y):
     walkRight = [pygame.image.load('media/sprites/TrollMan/Walk/WR/1.png'), pygame.image.load('media/sprites/TrollMan/Walk/WR/2.png'), pygame.image.load('media/sprites/TrollMan/Walk/WR/3.png'), pygame.image.load('media/sprites/TrollMan/Walk/WR/4.png'), pygame.image.load('media/sprites/TrollMan/Walk/WR/5.png'), pygame.image.load('media/sprites/TrollMan/Walk/WR/6.png'), pygame.image.load('media/sprites/TrollMan/Walk/WR/7.png'), pygame.image.load('media/sprites/TrollMan/Walk/WR/8.png'), pygame.image.load('media/sprites/TrollMan/Walk/WR/9.png')]
@@ -111,6 +111,6 @@ def make_TrollMan(State, X, Y):
     guidechar = pygame.image.load('media/outline.png')
     standing = pygame.image.load('media/sprites/TrollMan/standing.png')
     dead = pygame.image.load('media/sprites/TrollMan/dead.png')
-    return entity.FighterAi(State, X, Y, 50, 50, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, team = "enemy")
+    return entity.FighterAi(State, X, Y, 50, 50, char, standing, walkRight, walkLeft, walkUp, walkDown, attack, death, dead, team = "enemy",hp=20, spd=2, atk=7)
 
     

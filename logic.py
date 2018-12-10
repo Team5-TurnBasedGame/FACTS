@@ -5,6 +5,7 @@ import units
 import renderer
 import eventhandler as eh
 
+
 class State:
     
     entities = []
@@ -17,6 +18,9 @@ class State:
         self.previous = None
         self.screen = (10,10)
         self.r = renderer.Renderer(self.screen)
+
+    def initialize(self):
+        pass
 
     def add_entity(self, entity):
         self.entities.append(entity)
@@ -46,6 +50,13 @@ class State:
 class Title(State):
     def __init__(self):
         State.__init__(self)
+        pygame.mixer.init(44100, -16, 2, 2048)
+        pygame.mixer.music.load('media/menu.mp3')
+        pygame.mixer.music.play(-1)
+
+
+    def initialize(self):
+        pass
 
     def handle_events(self):
         eventList = pygame.event.get()
@@ -60,12 +71,17 @@ class Title(State):
         self.r.render_title_screen()
         pygame.display.flip()
 
+
     def clean_up(self):
         print("Cleaning up title")
 
 class LevelSelect(State):
     def __init__(self):
         State.__init__(self)
+
+
+    def initialize(self):
+        pass
 
     def handle_events(self):
         eventList = pygame.event.get()
@@ -87,6 +103,9 @@ class RosterMenu(State):
     def __init__(self):
         State.__init__(self)
 
+    def initialize(self):
+        pass
+
     def handle_events(self):
         eventList = pygame.event.get()
         eh.handle_system_events(self, eventList)
@@ -104,21 +123,47 @@ class RosterMenu(State):
 class Combat(State):
     def __init__(self, level):
         State.__init__(self)
-        if level == 1:
-            State.entities.append(units.make_swordsman(self, 4, 4))
-            State.entities.append(units.make_archerwoman(self, 9, 1))
-            #State.entities.append(units.make_elfwoman(self, 9, 2))
-            #State.entities.append(units.make_spearman(self, 9, 3))
-            #State.entities.append(units.make_wizardman(self, 9, 4))
-            State.entities.append(units.make_GoblinMan(self, 1,4))
-            State.entities.append(units.make_TrollMan(self, 1,5))
-        elif level == 2:
-            State.entities.append(units.make_archerwoman(self, 4, 4))
-            State.entities.append(units.make_archerwoman(self, 9, 1))
-            State.entities.append(units.make_TrollMan(self, 1,5))
-        elif level == 3:
-            State.entities.append(units.makewizardman(self, 1, 5))
-            State.entities.append(units.make_GoblinMan(self, 1,4))
+        self.level = level
+        
+    def initialize(self):
+        print(str(self.level))
+        if self.level == 1:
+            print("Level 1")
+            State.entities.append(units.make_swordsman(self, 1, 2))
+            State.entities.append(units.make_swordsman(self, 3, 5))
+            State.entities.append(units.make_swordsman(self, 1, 8))
+            State.entities.append(units.make_TrollMan(self, 9, 2))
+            State.entities.append(units.make_TrollMan(self, 9, 5))
+            State.entities.append(units.make_TrollMan(self, 9, 8))
+        elif self.level == 2:
+            print("Level 2")
+            State.entities.append(units.make_archerwoman(self, 1, 3))
+            State.entities.append(units.make_archerwoman(self, 4, 6))
+            State.entities.append(units.make_archerwoman(self, 5, 2))
+            State.entities.append(units.make_swordsman(self, 5, 6))  
+            State.entities.append(units.make_GoblinMan(self, 9,4))
+            State.entities.append(units.make_GoblinMan(self, 8,7))
+            State.entities.append(units.make_GoblinMan(self, 9,7))
+        elif self.level == 3:
+            print("Level 3")
+            State.entities.append(units.make_wizardman(self, 1, 5))
+            State.entities.append(units.make_archerwoman(self, 1, 3))
+            State.entities.append(units.make_swordsman(self, 2, 6))  
+            State.entities.append(units.make_spearman(self, 3, 6))
+            State.entities.append(units.make_elfwoman(self, 1, 9))  
+            
+            State.entities.append(units.make_GoblinMan(self, 9,9))
+            State.entities.append(units.make_GoblinMan(self, 9,2))
+            State.entities.append(units.make_GoblinMan(self, 8,4))
+            State.entities.append(units.make_GoblinMan(self, 7,5))
+            State.entities.append(units.make_TrollMan(self, 8,2))
+            State.entities.append(units.make_TrollMan(self, 9,6))
+            State.entities.append(units.make_TrollMan(self, 7,9))
+            State.entities.append(units.make_TrollMan(self, 8,9))
+            State.entities.append(units.make_OrkMan(self, 7,4))
+            State.entities.append(units.make_OrkMan(self, 8,1))
+            State.entities.append(units.make_OrkMan(self, 6,9))
+            State.entities.append(units.make_OrkMan(self, 9,4))
         else:
             print("Error! Invalid level!")
 
@@ -170,8 +215,13 @@ class Combat(State):
         for e in self.entities:
             if e.team == 'player':
                 playerAllDead = False
-        if playerAllDead: print("game over you lose")
+        if playerAllDead:
+            print("game over you lose")
+            self.animations.append(("lose", None))
         return playerAllDead
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load('media/level.mp3')
+        pygame.mixer.music.play(-1)
         
 
     def enemy_gameover(self):
@@ -179,8 +229,13 @@ class Combat(State):
         for e in self.entities:
             if e.team == 'enemy':
                 enemyAllDead = False
-        if enemyAllDead: print("you win!")
+        if enemyAllDead:
+            print("you win!")
+            self.animations.append(("win", None))
         return enemyAllDead
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load('media/level1.mp3')
+        pygame.mixer.music.play(-1)
         
     
 stateinfo = {
@@ -196,6 +251,7 @@ def update_state(State):
     if State.done == True:
         if State.next != None:
             temp = stateinfo[State.next]
+            temp.initialize()
             State.next = None
             State.done = False
             State.clean_up()
